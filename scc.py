@@ -39,6 +39,8 @@ class Graph:
                 # If we haven't discovered tt yet, we take a recursive step
                 if self.disc[tt] == -1:
                     self._scc_inner(tt)
+                    # Check if subtree rooted at tt has an edge to an ancestor
+                    # of t
                     self.min_disc[t] = min(self.min_disc[t], self.min_disc[tt])
 
                 elif tt in self.stack:
@@ -48,6 +50,7 @@ class Graph:
 
         tt = ''
         if self.min_disc[t] == self.disc[t]:
+            # t is the root of its subtree => we've found a maximal SCC
             idx = len(self.sccs)
             self.sccs.append([])
             while t != tt:
@@ -56,6 +59,7 @@ class Graph:
 
     # DFS baby
     def scc(self):
+        # Initialize all as not discovered
         self.disc = {t: -1 for t in self.G}
         self.min_disc = {t: -1 for t in self.G}
         self.stack = []
