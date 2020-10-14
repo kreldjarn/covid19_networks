@@ -20,6 +20,7 @@ class Graph:
     def __str__(self):
         return '\n'.join([f'{i}\t{",".join(scc)}' for i, scc in enumerate(self.sccs)])
 
+    # Parse xlsx file into adjacency lists
     def construct_graph(self, in_path):
         df = pd.read_excel(in_path, index_col=0)
         for r in df.iterrows():
@@ -64,6 +65,17 @@ class Graph:
             if self.disc[t] == -1:
                 self._scc_inner(t)
 
+    # Writes all SCCs of size greater than cap to path
+    def write_sccs(self, path, cap=0):
+        with open(path, 'w') as fh:
+            scc_id = 0
+            for scc in self.sccs:
+                if len(scc) > cap:
+                    fh.write('\n'.join(f'{t}\t{scc_id}' for t in scc))
+                    fh.write('\n')
+                    scc_id += 1
+
+
 def fix_t_id(t_id):
     if t_id[1] == ' ':
         t_id = t_id[1:]
@@ -88,6 +100,6 @@ if __name__ == '__main__':
     '''
     G = Graph(args.in_path)
     G.scc()
-    print(G)
+    G.write_sccs(args.out_path, cap=1)
 
 
