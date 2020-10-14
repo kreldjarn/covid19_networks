@@ -88,7 +88,7 @@ def fix_t_id(t_id):
     return t_id
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Detect cycles and cliques.')
+    parser = argparse.ArgumentParser(description='Find Strongly Connected Components of a graph defined in an xlsx file.')
     parser.add_argument('-i', type=str, dest='in_path', help='path to input file.')
     parser.add_argument('-o', type=str, dest='out_path', help='path to output file.')
     args = parser.parse_args()
