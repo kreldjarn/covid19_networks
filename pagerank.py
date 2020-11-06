@@ -46,7 +46,7 @@ def pagerank(G, d=.85, tol=1e-6, max_iter=10000, rev=False):
     if N < max_iter:
         print(f'Converged in {N} iterations')
 
-    return rank#/sum(rank)
+    return rank/sum(rank)
 
 def parse_dat_edges(path):
     print(f'Reading edges from {path}')
@@ -76,6 +76,7 @@ if __name__ == '__main__':
     parser.add_argument('-o', type=str, dest='out_path', help='path to output file.')
     args = parser.parse_args()
 
+    '''
     G = np.array([[1,1,0,0,0,0,0],
                   [1,1,0,0,0,0,0],
                   [0,0,1,0,0,0,0],
@@ -83,6 +84,7 @@ if __name__ == '__main__':
                   [0,0,0,0,1,0,0],
                   [0,0,0,0,0,0,0],
                   [0,0,0,0,0,1,1]])
+    '''
 
     G, nodes, nodes_map = parse_dat_edges(args.in_path)
     ranks = pagerank(G)
