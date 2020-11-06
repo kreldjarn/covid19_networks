@@ -58,7 +58,7 @@ def parse_dat_edges(path):
             t, f, _, _, w = line.split()
             to.append(t)
             frm.append(f)
-            wt.append(w.rstrip('\n'))
+            wt.append(float(w.rstrip('\n')))
 
     nodes = list(set(to).union(set(frm)))
     nodes_map = {n: i for i, n in enumerate(nodes)}
