@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 
+#==================================#
+#                                  #
+#   Author: Kristjan Eldjarn       #
+#   Email:  kristjan@eldjarn.net   #
+#                                  #
+#==================================#
+
 import argparse
 
-from scipy.sparse import csc_matrix as m
 import numpy as np
 
 def pagerank(G, d=.85, tol=1e-6, max_iter=10000, rev=False):
@@ -33,19 +39,20 @@ def pagerank(G, d=.85, tol=1e-6, max_iter=10000, rev=False):
             # Find incoming edges
             E_in = M[:,i].astype(np.float)
 
-            # Account for edges
+            # Account for edges to sink states
             S = sink_states / n
 
             # Account for restart
             R = np.ones(n) / n
 
             # Weighted PageRank step
-            rank[i] = rank_prev.dot((E_in + S)*d + R*(1-d)*G[i])
+            rank[i] = rank_prev.dot((E_in + S)*d + R*(1-d)*M[i])
         N += 1
 
     if N < max_iter:
         print(f'Converged in {N} iterations')
 
+    # Normalize ranks to sum up to 1
     return rank/sum(rank)
 
 def parse_dat_edges(path):
@@ -68,7 +75,7 @@ def parse_dat_edges(path):
     for t, f, w in zip(to, frm, wt):
         G[nodes_map[t],nodes_map[f]] = w
 
-    return G, nodes, nodes_map
+    return G, nodes
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Calculate the PageRank of a weighted, directed graph.')
@@ -86,7 +93,7 @@ if __name__ == '__main__':
                   [0,0,0,0,0,1,1]])
     '''
 
-    G, nodes, nodes_map = parse_dat_edges(args.in_path)
+    G, nodes = parse_dat_edges(args.in_path)
     ranks = pagerank(G)
 
     print(f'Writing PageRanks to {args.out_path}')
